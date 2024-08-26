@@ -3,7 +3,6 @@ name: Publish Docker image
 on:
   push:
     branches: main
-
 jobs:
   push_to_registry:
     name: Deploy Docker image in Azure VM
