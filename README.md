@@ -64,7 +64,7 @@ To manually trigger the workflow, use the following command:
 
 ```bash
 git push origin main
-
+```
 
 ## Troubleshooting
 
