@@ -54,5 +54,8 @@ jobs:
           # Execute the deployment script on the remote server
           ssh -i private_key -o StrictHostKeyChecking=yes $AZURE_SSH_USERNAME@$AZURE_VM_IP 'bash /tmp/deploy.sh'
 
+          # Deleting deploy.sh from remote server
+          ssh -i private_key -o StrictHostKeyChecking=yes $AZURE_SSH_USERNAME@$AZURE_VM_IP 'rm /tmp/deploy.sh'
+
           # Clean up
           rm private_key
