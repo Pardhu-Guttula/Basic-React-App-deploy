@@ -61,7 +61,6 @@ jobs:
           echo "Removing deploy.sh"
           ssh -i private_key -o StrictHostKeyChecking=yes $AZURE_SSH_USERNAME@$AZURE_VM_IP 'rm /tmp/deploy.sh'
 
-
           # Clean up
           echo "Removing Private key"
           rm private_key
