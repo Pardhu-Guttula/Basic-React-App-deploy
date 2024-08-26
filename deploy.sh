@@ -12,6 +12,7 @@ if [ "$(docker ps -q -f name=my-react-app-container)" ]; then
   docker rm my-react-app-container
 fi
 
+docker rmi pardhuguttula/react-img:main
 # Pull the Docker image
 docker pull pardhuguttula/react-img:main
 

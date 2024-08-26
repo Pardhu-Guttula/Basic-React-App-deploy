@@ -42,8 +42,6 @@ jobs:
           AZURE_VM_IP: ${{ secrets.AZURE_VM_IP }}
           AZURE_SSH_USERNAME: ${{ secrets.AZURE_SSH_USERNAME }}
           AZURE_SSH_KEY: ${{ secrets.AZURE_SSH_KEY }}
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
         run: |
           echo "${AZURE_SSH_KEY}" > private_key
           chmod 600 private_key
