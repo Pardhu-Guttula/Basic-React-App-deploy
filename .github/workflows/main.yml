@@ -46,16 +46,21 @@ jobs:
           echo "${AZURE_SSH_KEY}" > private_key
           chmod 600 private_key
 
+          echo "Adding VM ip to known_hosts"
           ssh-keyscan -H $AZURE_VM_IP >> ~/.ssh/known_hosts
 
           # Transfer the deployment script to the remote server
+          echo "Copying deploy.sh"
           scp -i private_key -o StrictHostKeyChecking=yes deploy.sh $AZURE_SSH_USERNAME@$AZURE_VM_IP:/tmp/deploy.sh
 
           # Execute the deployment script on the remote server
+          echo "Executing deploy.sh"
           ssh -i private_key -o StrictHostKeyChecking=yes $AZURE_SSH_USERNAME@$AZURE_VM_IP 'bash /tmp/deploy.sh'
 
           # Deleting deploy.sh from remote server
+          echo "Removing deploy.sh"
           ssh -i private_key -o StrictHostKeyChecking=yes $AZURE_SSH_USERNAME@$AZURE_VM_IP 'rm /tmp/deploy.sh'
 
           # Clean up
+          echo "Removing Private key"
           rm private_key
