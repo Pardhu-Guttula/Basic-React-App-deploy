@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DOCKERHUB_USERNAME=$1
+DOCKERHUB_PASSWORD=$2
 # Log in to Docker Hub
 echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 

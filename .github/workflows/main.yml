@@ -54,7 +54,7 @@ jobs:
           scp -i private_key -o StrictHostKeyChecking=yes deploy.sh $AZURE_SSH_USERNAME@$AZURE_VM_IP:/tmp/deploy.sh
 
           # Execute the deployment script on the remote server
-          ssh -i private_key -o StrictHostKeyChecking=yes $AZURE_SSH_USERNAME@$AZURE_VM_IP 'bash /tmp/deploy.sh'
+          ssh -i private_key -o StrictHostKeyChecking=yes $AZURE_SSH_USERNAME@$AZURE_VM_IP 'bash /tmp/deploy.sh $DOCKERHUB_USERNAME $DOCKERHUB_PASSWORD'
 
           # Clean up
           rm private_key
