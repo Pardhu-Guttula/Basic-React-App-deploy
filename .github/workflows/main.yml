@@ -31,6 +31,12 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+    - name: Create SSH directory
+      run: |
+        mkdir -p ~/.ssh
+        touch ~/.ssh/known_hosts
+
       - name: Deploy to Azure VM
         env:
           AZURE_VM_IP: ${{ secrets.AZURE_VM_IP }}
@@ -40,6 +46,8 @@ jobs:
           echo "${AZURE_SSH_KEY}" > private_key
           chmod 600 private_key
 
+          ssh-keyscan -H $AZURE_VM_IP >> ~/.ssh/known_hosts
+          
           ssh -i private_key -o StrictHostKeyChecking=yes $AZURE_SSH_USERNAME@$AZURE_VM_IP << 'EOF'
             # Log in to Docker Hub
             echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
