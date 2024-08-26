@@ -31,3 +31,25 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      - name: Deploy to Azure VM
+        env:
+          AZURE_VM_IP: ${{ secrets.AZURE_VM_IP }}
+          AZURE_SSH_USERNAME: ${{ secrets.AZURE_SSH_USERNAME }}
+          AZURE_SSH_KEY: ${{ secrets.AZURE_SSH_KEY }}
+        run: |
+          echo "${AZURE_SSH_KEY}" > private_key
+          chmod 600 private_key
+
+          ssh -i private_key -o StrictHostKeyChecking=no $AZURE_SSH_USERNAME@$AZURE_VM_IP << 'EOF'
+            # Log in to Docker Hub
+            echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
+
+            # Pull the Docker image
+            docker pull pardhuguttula/react-img:latest
+
+            # Run the Docker container
+            docker run -d -p 5000:5000 --name my-react-app-container pardhuguttula/react-img:latest
+          EOF
+
+          # Clean up
+          rm private_key
