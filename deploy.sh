@@ -3,7 +3,7 @@
 DOCKERHUB_USERNAME=$1
 DOCKERHUB_PASSWORD=$2
 # Log in to Docker Hub
-echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASSWORD"
 
 # Check if the container is already running and stop/remove it if necessary
 if [ "$(docker ps -q -f name=my-react-app-container)" ]; then
