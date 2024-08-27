@@ -1,12 +1,11 @@
-name: Publish Docker image
-
+name: Self-hosted Runner
 on:
   push:
     branches: self-hosted
 
 jobs:
   push_to_registry:
-    name: Deploy Docker image in Azure VM
+    name: Deploy is done by Self-Hosted Runner
     runs-on: self-hosted
     steps:
       - name: Check out the repo

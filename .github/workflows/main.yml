@@ -1,4 +1,4 @@
-name: Publish Docker image
+name: Github-hosted Runner
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   push_to_registry:
-    name: Deploy Docker image in Azure VM
+    name: Deployment is done by Github-Hosted Runner
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
