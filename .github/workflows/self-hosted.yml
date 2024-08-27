@@ -1,0 +1,66 @@
+name: Publish Docker image
+
+on:
+  push:
+    branches: self-hosted
+
+jobs:
+  push_to_registry:
+    name: Deploy Docker image in Azure VM
+    runs-on: self-hosted
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: pardhuguttula/react-img
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Create SSH directory
+        run: |
+          mkdir -p ~/.ssh
+          touch ~/.ssh/known_hosts
+
+      - name: Deploy to Azure VM
+        env:
+          AZURE_VM_IP: ${{ secrets.AZURE_VM_IP }}
+          AZURE_SSH_USERNAME: ${{ secrets.AZURE_SSH_USERNAME }}
+          AZURE_SSH_KEY: ${{ secrets.AZURE_SSH_KEY }}
+        run: |
+          echo "${AZURE_SSH_KEY}" > private_key
+          chmod 600 private_key
+
+          echo "Adding VM ip to known_hosts"
+          ssh-keyscan -H $AZURE_VM_IP >> ~/.ssh/known_hosts
+
+          # Transfer the deployment script to the remote server
+          echo "Copying deploy.sh"
+          scp -i private_key -o StrictHostKeyChecking=yes deploy.sh $AZURE_SSH_USERNAME@$AZURE_VM_IP:/tmp/deploy.sh
+
+          # Execute the deployment script on the remote server
+          echo "Executing deploy.sh"
+          ssh -i private_key -o StrictHostKeyChecking=yes $AZURE_SSH_USERNAME@$AZURE_VM_IP 'bash /tmp/deploy.sh'
+
+          # Deleting deploy.sh from remote server
+          echo "Removing deploy.sh"
+          ssh -i private_key -o StrictHostKeyChecking=yes $AZURE_SSH_USERNAME@$AZURE_VM_IP 'rm /tmp/deploy.sh'
+
+          # Clean up
+          echo "Removing Private key"
+          rm private_key
