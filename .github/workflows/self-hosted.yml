@@ -1,5 +1,4 @@
-name: Publish Docker image
-
+name: Self-hosted Runner
 on:
   push:
     branches: self-hosted
