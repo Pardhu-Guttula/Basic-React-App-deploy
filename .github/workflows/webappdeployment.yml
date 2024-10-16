@@ -45,7 +45,7 @@ jobs:
           package: './build'  # Path to the build folder created by npm run build
 
       # Optional Step 6: Swap the Slot with Production
-      # - name: 'Swap staging slot with production'
-      #   uses: azure/cli@v1
-      #   with:
-      #     inlineScript: az webapp deployment slot swap --name 'ReactAppDemo' --resource-group 'bluegreendeployment' --slot 'staging' --target-slot 'production'
+      - name: 'Swap staging slot with production'
+        uses: azure/cli@v1
+        with:
+          inlineScript: az webapp deployment slot swap --name 'ReactAppDemo' --resource-group 'bluegreendeployment' --slot 'staging' --target-slot 'production'
