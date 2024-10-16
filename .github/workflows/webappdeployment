@@ -1,0 +1,50 @@
+name: Deploy React App to Azure Web App
+
+on:
+  push:
+    branches: main
+
+jobs:
+  build_and_deploy:
+    name: Build and Deploy React App to Azure Web App
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the code from the repository
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js (assumed the React app uses Node.js for building)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Build the React application
+      - name: Build React app
+        run: npm run build
+
+      # Step 5: Upload build artifacts (Optional, for debugging)
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: build/
+
+      # Step 6: Log in to Azure CLI using a service principal
+      - name: 'Log in to Azure'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Step 7: Deploy the React app to Azure Web App
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'ReactAppDemo' # Replace with the name of your Azure Web App
+          slot-name: 'production' # Optional, the deployment slot (e.g., 'staging', 'production')
+          package: './build' # Path to the build folder that was created by npm run build
