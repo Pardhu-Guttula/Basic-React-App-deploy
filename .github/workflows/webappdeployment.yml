@@ -49,14 +49,21 @@ jobs:
         # continue-on-error: true  # Allow this step to succeed even if the slot already exists
 
       # Step 7: Deploy to Azure Web App Slot using publish profile
+      # - name: 'Deploy to Azure Web App Slot'
+      #   uses: azure/webapps-deploy@v2
+      #   with:
+      #     app-name: 'ReactAppDemo'  # Replace with your Azure Web App name
+      #     slot-name: 'staging'  # Slot name to deploy to
+      #     publish-profile: ${{ secrets.AZURE_WEBAPP_SLOT_PUBLISH_PROFILE }}
+      #     package: './build'
+
       - name: 'Deploy to Azure Web App Slot'
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'ReactAppDemo'  # Replace with your Azure Web App name
-          slot-name: 'staging'  # Slot name to deploy to
-          publish-profile: ${{ secrets.AZURE_WEBAPP_SLOT_PUBLISH_PROFILE }}
-          package: './build'
-          
+          app-name: 'ReactAppDemo'  # Replace with the name of your Azure Web App
+          slot-name: 'staging'  # Replace with your slot name (e.g., staging)
+          package: './build'  # Path to the build folder created by npm run build
+
       # # Optional Step 6: Swap the Slot with Production
       - name: 'Swap staging slot with production'
         run: |
