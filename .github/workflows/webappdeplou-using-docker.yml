@@ -34,13 +34,13 @@ jobs:
 
       - name: Create Staging Slot
         run: |
-          az webapp deployment slot create --name ReactAppDemo --resource-group bluegreendeployment --slot staging
+          az webapp deployment slot create --name ReactAppDemoUsingDocker --resource-group bluegreendeployment --slot staging
         continue-on-error: true  # Allow this step to succeed even if the slot already exists
 
       # Configure Web App for Docker and deploy to staging slot
       - name: 'Deploy Docker Image to Azure Web App Slot'
         run: |
-          az webapp config container set --name 'ReactAppDemo' \
+          az webapp config container set --name 'ReactAppDemoUsingDocker' \
             --resource-group 'bluegreendeployment' \
             --slot 'staging' \
             --container-image-name ${{ secrets.DOCKERHUB_USERNAME }}/react-img:latest \
@@ -50,4 +50,4 @@ jobs:
 
       - name: 'Swap staging slot with production'
         run: |
-          az webapp deployment slot swap --name 'ReactAppDemo' --resource-group 'bluegreendeployment' --slot 'staging' --target-slot 'production'
+          az webapp deployment slot swap --name 'ReactAppDemoUsingDocker' --resource-group 'bluegreendeployment' --slot 'staging' --target-slot 'production'
