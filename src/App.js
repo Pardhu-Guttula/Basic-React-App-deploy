@@ -6,7 +6,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>Welcome to React App</h1>
-        <p>This is a basic React app.</p>
+        <p>This is a basic React app deployed using docker in azure webapps</p>
       </header>
     </div>
   );
