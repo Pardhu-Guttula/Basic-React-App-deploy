@@ -48,6 +48,6 @@ jobs:
             --container-registry-user ${{ secrets.DOCKERHUB_USERNAME }} \
             --container-registry-password ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: 'Swap staging slot with production'
-        run: |
-          az webapp deployment slot swap --name 'ReactAppDemoUsingDocker' --resource-group 'bluegreendeployment' --slot 'staging' --target-slot 'production'
+      # - name: 'Swap staging slot with production'
+      #   run: |
+      #     az webapp deployment slot swap --name 'ReactAppDemoUsingDocker' --resource-group 'bluegreendeployment' --slot 'staging' --target-slot 'production'
